@@ -1,0 +1,103 @@
+---
+title: "R Functions LabClass06"
+format: pdf
+editor: visual
+---
+
+What: A function is defined with: a user selected name, a comma separated set of input arguments, and regular R code for the function body
+
+*fname\<-function(arg1,arg2){paste(arg1,arg2}*
+
+**My first function:**
+
+```{r}
+add<-function(x,y=1){
+  x+y
+}
+```
+
+Can i just use it? *(specifying Y will override the y in the original function)*
+
+```{r}
+add(1,1)
+add(x=1, y=100)
+add(c(100, 1,100),1)
+```
+
+```{r}
+add(10)
+```
+
+You'll need to specify a third variable if you want to run this:
+
+```{r}
+#add( 1, 1, z=1)
+```
+
+Q: make a function "generate_dna() that makes a random nucleotide sequence of any length
+
+First, make your snippets that work
+
+```{r}
+bases<-c("A", "C", "G", "T")
+sequence<-sample(bases, size=5, replace=TRUE)
+```
+
+Then, turn it into a function
+
+```{r}
+generate_dna<-function(length){
+  bases<-c("A", "C", "G", "T")
+  sequence<-sample(bases, size=length,
+                   replace=TRUE)
+  return(sequence)
+}
+
+```
+
+```{r}
+generate_dna(10)
+```
+
+New package! (bio3d)
+
+There's a lot of amino acids, but we want just one entry per amino acid. Use the function `unique()` from the entire data bio3d::aa.table and use the \$ to specify a column
+
+```{r}
+unique(bio3d::aa.table$aa1)
+```
+
+Now let's generate a function that generates random proteins of lengths 6 to 12
+
+```{r}
+generate_protein<-function(length){
+  aa<-c(unique(bio3d::aa.table$aa1))
+  protein_sequence<-sample(aa, size=length, replace=TRUE)
+  #but we want to remove the " that it will give out. So use this code
+  protein_sequence<-paste(protein_sequence, collapse="")
+  return(protein_sequence)
+}
+```
+
+```{r}
+answer<-sapply(6:12, generate_protein)
+answer
+```
+
+Now let's ID each sequence:
+
+```{r}
+paste(">id.", 6:12, answer,sep="")
+```
+
+```{r}
+cat(paste(">id.", 6:12, answer,sep=""))
+```
+
+```{r}
+cat(paste(">id.", 6:12, "\n", answer,sep=""))
+```
+
+```{r}
+cat(paste(">id.", 6:12, "\n", answer,sep=""), sep="\n")
+```

@@ -1,0 +1,198 @@
+---
+title: "Class10"
+author: "Juan Gonzalez (PID: A69036681"
+format: pdf
+editor: visual
+---
+
+#Introduction to the RCSB Protein
+
+Download a CSV file from the PDB site (accessible from “Analyze” \> “PDB Statistics” \> “by Experimental Method and Molecular Type”. Move this CSV file into your RStudio project and use it to answer the following questions:
+
+```{r}
+data <- read.csv("Data Export Summary.csv")
+```
+
+**Q1: What percentage of structures in the PDB are solved by X-Ray and Electron Microscopy.**
+
+```{r}
+xray_total <- sum(as.numeric(gsub(",", "", data$X.ray)))
+em_total <- sum(as.numeric(gsub(",", "", data$EM)))
+total_structures <- sum(as.numeric(gsub(",", "", data$Total)))
+
+xray_percentage <- (xray_total / total_structures) * 100
+em_percentage <- (em_total / total_structures) * 100
+
+xray_percentage
+em_percentage
+```
+
+**Q2: What proportion of structures in the PDB are protein?**
+
+```{r}
+
+protein_total <- as.numeric(gsub(",", "", data[data$Molecular.Type == "Protein (only)", "Total"]))
+
+protein_proportion <- (protein_total / total_structures) * 100
+
+protein_proportion
+```
+
+**Q3: Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?**
+
+I receive 4,563 structures when I input HIV in the PDB website search box.
+
+#Visualizing the HIV-1 protease structure Mol\* (pronounced “molstar”) is a new web-based molecular viewer that is rapidly gaining in popularity and utility. At the time of writing it is still a long way from having the full feature set of stand-alone molecular viewer programs like VMD, PyMol or Chimera. However, it is gaining new features all the time and does not require any download or complicated installation.
+
+**Q4: Water molecules normally have 3 atoms. Why do we see just one atom per water molecule in this structure?**
+
+There could be x-ray limitations in detecting water molecules or unless it is implied the one atom means a water molecule.
+
+**Q5: There is a critical “conserved” water molecule in the binding site. Can you identify this water molecule? What residue number does this water molecule have**
+
+I see HOH 308 inside the protein, which I assume is the binding site.
+
+**Q6: Generate and save a figure clearly showing the two distinct chains of HIV-protease along with the ligand. You might also consider showing the catalytic residues ASP 25 in each chain and the critical water (we recommend “Ball & Stick” for these side-chains). Add this figure to your Quarto document.**
+
+![HIV-1 protease structure with ligand and catalytic residues](1HSG-3.png)
+
+#Introduction to Bio3D in R
+
+Bio3D is an R package for structural bioinformatics. Features include the ability to read, write and analyze biomolecular structure, sequence and dynamic trajectory data.
+
+```{r}
+library(bio3d)
+```
+
+```{r}
+pdb <- read.pdb("1hsg")
+```
+
+```{r}
+pdb
+```
+
+**Q7: How many amino acid residues are there in this pdb object?** 198 **Q8: Name one of the two non-protein residues?** HOH **Q9: How many protein chains are in this structure?** 2 protein chains
+
+```{r}
+attributes(pdb)
+```
+
+To access these individual attributes we use the dollar-attribute name convention that is common with R list objects. For example, to access the atom attribute or component use pdb\$atom:
+
+```{r}
+head(pdb$atom)
+```
+
+Predicting functional motions of a single structure Let’s read a new PDB structure of Adenylate Kinase and perform Normal mode analysis.
+
+```{r}
+adk <- read.pdb("6s36")
+```
+
+```{r}
+adk
+```
+
+Normal mode analysis (NMA) is a structural bioinformatics method to predict protein flexibility and potential functional motions (a.k.a. conformational changes).
+
+```{r}
+m <- nma(adk)
+```
+
+```{r}
+#plot(m)
+```
+
+```{r}
+mktrj(m, file="adk_m7.pdb")
+```
+
+#Comparative structure analysis of Adenylate Kinase
+
+The goal of this section is to perform principal component analysis (PCA) on the complete collection of Adenylate kinase structures in the protein data-bank (PDB).
+
+Adenylate kinase (often called simply Adk) is a ubiquitous enzyme that functions to maintain the equilibrium between cytoplasmic nucleotides essential for many cellular processes. Adk operates by catalyzing the reversible transfer of a phosphoryl group from ATP to AMP. This reaction requires a rate limiting conformational transition (i.e. change in shape). Here we analyze all currently available Adk structures in the PDB to reveal detailed features and mechanistic principles of these essential shape changing transitions.
+
+**Q10. Which of the packages above is found only on BioConductor and not CRAN?**
+
+msa is only found in bioconductor
+
+**Q11. Which of the above packages is not found on BioConductor or CRAN?** bio3d-view is not found in both, but being installed in Bitbucket.
+
+**Q12. True or False? Functions from the devtools package can be used to install packages from GitHub and BitBucket?** True!
+
+Below we perform a blast search of the PDB database to identify related structures to our query Adenylate kinase (ADK) sequence. In this particular example we use function get.seq() to fetch the query sequence for chain A of the PDB ID 1AKE and use this as input to blast.pdb(). Note that get.seq() would also allow the corresponding UniProt identifier.
+
+```{r}
+library(bio3d)
+aa <- get.seq("1ake_A")
+```
+
+```{r}
+aa
+```
+
+**Q13. How many amino acids are in this sequence, i.e. how long is this sequence?** 214
+
+```{r}
+# Blast or hmmer search 
+#b <- blast.pdb(aa)
+```
+
+```{r}
+# Plot a summary of search results
+#hits <- plot(b)
+```
+
+```{r}
+# List out some 'top hits'
+#head(hits$pdb.id)
+```
+
+```{r}
+#hits <- NULL
+#hits$pdb.id <- c('1AKE_A','6S36_A','6RZE_A','3HPR_A','1E4V_A','5EJE_A','1E4Y_A','3X2S_A','6HAP_A','6HAM_A','4K46_A','3GMT_A','4PZL_A')
+```
+
+```{r}
+# Download releated PDB files
+#files <- get.pdb(hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+```
+
+```{r}
+# Align releated PDBs
+#pdbs <- pdbaln(files, fit = TRUE, exefile="msa")
+```
+
+```{r}
+# Vector containing PDB codes for figure axis
+#ids <- basename.pdb(pdbs$id)
+
+# Draw schematic alignment
+#plot(pdbs, labels=ids)
+```
+
+#Annotate collected PDB structures
+
+```{r}
+#anno <- pdb.annotate(ids)
+#unique(anno$source)
+```
+
+```{r}
+#pc.xray <- pca(pdbs)
+#plot(pc.xray)
+```
+
+```{r}
+# Calculate RMSD
+#rd <- rmsd(pdbs)
+
+# Structure-based clustering
+#hc.rd <- hclust(dist(rd))
+#grps.rd <- cutree(hc.rd, k=3)
+
+#plot(pc.xray, 1:2, col="grey50", bg=grps.rd, pch=21, cex=1)
+```
+

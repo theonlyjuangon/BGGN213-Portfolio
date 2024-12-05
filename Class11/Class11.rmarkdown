@@ -1,0 +1,95 @@
+---
+title: "Class 11: Structural Bioinformatics Pt. 2"
+author: "Juan Gonzalez (PID: )"
+format: pdf
+editor: visual
+---
+
+
+
+Today, before delving into structure prediction with AlphaFold, we will finish off our previous lab10 "compariative structure analysis" section. 
+
+
+
+```{r}
+library(bio3d)
+
+id<-"1ake_A"
+
+aa<-get.seq(id)
+aa
+```
+
+```{r}
+b<-blast.pdb(aa)
+```
+
+```{r}
+attributes(b)
+```
+
+```{r}
+head(b$hit.tbl)
+```
+
+```{r}
+plot(b)
+```
+
+```{r}
+hits<-plot(b)
+```
+
+```{r}
+attributes(hits)
+```
+
+```{r}
+hits$pdb.id
+```
+
+```{r}
+#download related PDB files
+files<-get.pdb(hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+```
+
+
+
+I have now found and downloaded all ADK structures in the PDB database but viewing them is difficult as they need to be aligned and superpossed. 
+
+I am going to install BiocManager package from CRAN. Then I can use `BiocManager::install()` to install any bioconductor package. Here we installed `"msa"`
+
+
+
+```{r}
+pdbs<-pdbaln(files, fit=TRUE, exefile="msa")
+```
+
+```{r}
+pdbs
+```
+
+
+#Principal Component Analysis
+
+
+
+```{r}
+pc<-pca(pdbs)
+plot(pc)
+```
+
+```{r}
+plot(pc, pc.axes=c(1:2))
+```
+
+
+To examine in more detail what PC1 (or any PC) is capturing here, we can plot the loadings or make a wee movie (trajectory) of moving along PC1
+
+
+
+
+```{r}
+mktrj(pc, pc=1, file="pc1.pdb")
+```
+

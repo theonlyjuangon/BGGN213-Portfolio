@@ -1,0 +1,143 @@
+---
+title: "Class13"
+author: "Juan Gonzalez (PID: A69036681)"
+format: pdf
+editor: visual
+---
+
+**Transcriptomics and the analysis of RNA-seq data**
+
+Bioconductor is a large repository and resource for R packages that focus on analysis of high-throughput genomic data.
+
+The count matrix (called the countData in DESeq2-speak) the value in the i-th row and the j-th column of the data.frame tells us how many reads can be assigned to gene i in sample j. Analogously, for other types of assays, the rows of this matrix might correspond e.g. to binding regions (with ChIP-Seq) or peptide sequences (with quantitative mass spectrometry).
+
+For the sample metadata (i.e. colData in DESeq2-speak) samples are in rows and metadata about those samples are in columns. Notice that the first column of colData must match the column names of countData (except the first, which is the gene ID column) (Figure 2).
+
+
+
+```{r}
+counts <- read.csv("airway_scaledcounts.csv", row.names=1)
+metadata <-  read.csv("airway_metadata.csv")
+```
+
+```{r}
+head(counts)
+```
+
+```{r}
+head(metadata)
+```
+
+**Q1. How many genes are in this dataset?**
+
+38694 genes
+
+```{r}
+dim(counts)
+```
+
+
+**How many ‘control’ cell lines do we have?**
+4 controls (obtained from the metadata)
+
+#Toy Differential Gene Expression
+
+Note that the control samples are SRR1039508, SRR1039512, SRR1039516, and SRR1039520. This bit of code will first find the sample id for those labeled control. Then calculate the mean counts per gene across these samples:
+
+```{r}
+control <- metadata[metadata[,"dex"]=="control",]
+control.counts <- counts[ ,control$id]
+control.mean <- rowSums(  control.counts )/4 
+head(control.mean)
+
+```
+
+**Q3. How would you make the above code in either approach more robust? Is there a function that could help here?**
+
+```{r}
+inds<-metadata$dex=="control"
+control.metadata<-metadata[inds,]
+control.counts<-counts[, control.metadata$id]
+control.mean <- rowMeans(control.counts)
+head(control.mean)
+```
+
+**Q4. Follow the same procedure for the treated samples (i.e. calculate the mean per gene across drug treated samples and assign to a labeled vector called treated.mean)**
+
+```{r}
+treated.mean<-rowMeans(counts[,metadata[metadata$dex=="treated", ]$id])
+
+```
+
+We will now combine our meancount data for bookkeeping purposes
+```{r}
+meancounts <- data.frame(control.mean, treated.mean)
+```
+
+Always plot your data to get a feel for it
+
+**Q5 (a). Create a scatter plot showing the mean of the treated samples against the mean of the control samples. Your plot should look something like the following.**
+
+```{r}
+plot(meancounts[,1],meancounts[,2], xlab="Control", ylab="Treated")
+```
+
+**Q5 (b).You could also use the ggplot2 package to make this figure producing the plot below. What geom_?() function would you use for this plot?**
+
+```{r}
+library(ggplot2)
+ggplot(meancounts) +
+  aes(control.mean, treated.mean) +
+  geom_point()
+```
+**Q6. Try plotting both axes on a log scale. What is the argument to plot() that allows you to do this?**
+
+```{r}
+plot(meancounts[,1:2], log="xy")
+```
+
+We can use `log2()` to ensure that no changes are 0 instead of 1.
+
+```{r}
+meancounts$log2fc<-log2(meancounts$treated.mean/meancounts$control.mean)
+```
+
+A common rule of thumb in the field is to focus initially on big changes with a cutoff log2fc of +2 or -2. 
+
+There are a couple of “weird” results. Namely, the NaN (“not a number”) and -Inf (negative infinity) results.
+
+```{r}
+zero.vals <- which(meancounts[,1:2]==0, arr.ind=TRUE)
+
+to.rm <- unique(zero.vals[,1])
+mycounts <- meancounts[-to.rm,]
+head(mycounts)
+```
+
+**Q7. What is the purpose of the arr.ind argument in the which() function call above? Why would we then take the first column of the output and need to call the unique() function?**
+
+The arr.ind argument will clause `which()` to returb both the row and column indices where there are true values. We put ==0, so this will tell use which genes and samples have zero counts and then ignore the zero count genes. Calling `unique()` will make sure we do not call any row twice if it has a zero in both samples. 
+
+**Q8. Using the up.ind vector above can you determine how many up regulated genes we have at the greater than 2 fc level?**
+
+```{r}
+up.ind <- mycounts$log2fc > 2
+sum(up.ind)
+```
+
+
+**Q9. Using the down.ind vector above can you determine how many down regulated genes we have at the greater than 2 fc level?**
+
+```{r}
+down.ind <- mycounts$log2fc < (-2)
+sum(down.ind)
+```
+
+
+**Q10. Do you trust these results? Why or why not?**
+
+We can not trust these result just yet because we need to make sure they are statistically significant.
+
+
+
+

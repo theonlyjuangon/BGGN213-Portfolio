@@ -1,0 +1,30 @@
+# Load necessary libraries
+library(ggplot2)
+library(reshape2)
+
+# Load necessary library
+library(ggplot2)
+
+# Load the data
+data <- read.csv("Layers_Float_Sink_Data_Simple_Labels.csv")
+
+# Plot for 0Film
+ggplot(data, aes(x = Minutes)) +
+  geom_line(aes(y = X0Film_Float, color = "Float"), size = 1) +
+  geom_line(aes(y = X0Film_Sink, color = "Sink"), size = 1) +
+  labs(title = "0Film Float and Sink", x = "Minutes", y = "Count", color = "Measurement") +
+  theme_minimal()
+
+# Plot for 1Film
+ggplot(data, aes(x = Minutes)) +
+  geom_line(aes(y = X1Film_Float, color = "Float"), size = 1) +
+  geom_line(aes(y = X1Film_Sink, color = "Sink"), size = 1) +
+  labs(title = "1Film Float and Sink", x = "Minutes", y = "Count", color = "Measurement") +
+  theme_minimal()
+
+# Plot for 2Film
+ggplot(data, aes(x = Minutes)) +
+  geom_line(aes(y = X2Film_Float, color = "Float"), size = 1) +
+  geom_line(aes(y = X2Film_Sink, color = "Sink"), size = 1) +
+  labs(title = "2Film Float and Sink", x = "Minutes", y = "Count", color = "Measurement") +
+  theme_minimal()
