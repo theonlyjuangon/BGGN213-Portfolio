@@ -1,0 +1,6 @@
+"0","down.ind <- mycounts$log2fc < (-2)"
+"0","sum(down.ind)"
+"1","[1]"
+"1"," 367"
+"1","
+"

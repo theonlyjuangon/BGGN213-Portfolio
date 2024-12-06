@@ -1,0 +1,6 @@
+"0","igg %>% filter(visit != 8) %>%"
+"0","ggplot() +"
+"0","  aes(MFI_normalised, antigen, col=infancy_vac ) +"
+"0","  geom_boxplot(show.legend = FALSE) + "
+"0","  xlim(0,75) +"
+"0","  facet_wrap(vars(infancy_vac, visit), nrow=2)"

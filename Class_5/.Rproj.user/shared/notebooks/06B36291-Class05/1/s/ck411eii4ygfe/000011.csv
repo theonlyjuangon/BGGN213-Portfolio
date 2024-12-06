@@ -1,0 +1,7 @@
+"0","library(dplyr)"
+"0",""
+"0","gapminder_2007 <- gapminder %>% filter(year==2007)"
+"0",""
+"0","ggplot(gapminder_2007) +"
+"0","  aes(x=gdpPercap, y=lifeExp) +"
+"0","  geom_point(alpha=0.5)"

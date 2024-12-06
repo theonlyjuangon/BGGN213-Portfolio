@@ -1,0 +1,2 @@
+"0","treated.mean<-rowMeans(counts[,metadata[metadata$dex==""treated"", ]$id])"
+"0",""

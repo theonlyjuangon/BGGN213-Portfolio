@@ -1,0 +1,2 @@
+"0","# Use todays date to calculate age in days"
+"0","subject$age <- today() - ymd(subject$year_of_birth)"

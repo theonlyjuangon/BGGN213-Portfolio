@@ -1,0 +1,24 @@
+"0","# A different PDF based output of the same data"
+"0","pathview(gene.data=foldchanges, pathway.id=""hsa04110"", kegg.native=FALSE)"
+"2","'select()' returned 1:1 mapping between
+keys and columns
+"
+"2","Warning: reconcile groups sharing member nodes!
+"
+"1","    "
+"1"," [,1]"
+"1"," [,2] "
+"1","
+[1,]"
+"1"," ""9"" "
+"1"," ""300"""
+"1","
+[2,]"
+"1"," ""9"" "
+"1"," ""306"""
+"1","
+"
+"2","Info: Working in directory /Users/juangonzalez/Desktop/UCSD Classes/Bioinformatics/Bioinformatics R Folder/Lab14_MiniProject
+"
+"2","Info: Writing image file hsa04110.pathview.pdf
+"

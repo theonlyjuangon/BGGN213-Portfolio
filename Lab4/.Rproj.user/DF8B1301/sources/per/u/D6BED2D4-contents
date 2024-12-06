@@ -1,0 +1,48 @@
+source("http://thegrantlab.org/misc/cdc.R")
+
+str(cdc)
+
+plot(cdc$height, cdc$weight, 
+     xlab = "Height (inches)", 
+     ylab = "Weight (pounds)", 
+     main = "Height vs. Weight",
+     pch = 5)  # pch = 16 makes the points solid
+
+cor(cdc$height, cdc$weight)
+
+cor(cdc$height, cdc$weight)
+
+hist(cdc$height)
+
+height_m <- cdc$height * 0.0254
+
+weight_kg <- cdc$weight * 0.453592
+
+height_m <- cdc$height / 100  # assuming height is in centimeters
+
+# Calculate BMI
+bmi <- weight_kg / (height_m^2)
+
+# Plot height vs. BMI
+plot(cdc$height, bmi, 
+     xlab = "Height (cm)", 
+     ylab = "BMI", 
+     main = "Height vs. BMI",
+     pch = 5)
+
+
+cor(cdc$height, bmi)
+num_obese <- sum(bmi >= 30)
+num_obese
+
+plot(cdc[1:100,]$height, cdc$weight[1:100,]$weight,
+     xlab = "Height",
+     ylab = "Weight",
+     main = "Height vs. Weight (First 100 Respondents)",
+     pch = 5)
+num_obese_males <- sum(bmi >= 30 & cdc$gender == "male")
+num_obese_males
+
+obese <- bmi >= 30
+obesity_gender_table <- table(obese, cdc$gender)
+obesity_gender_table

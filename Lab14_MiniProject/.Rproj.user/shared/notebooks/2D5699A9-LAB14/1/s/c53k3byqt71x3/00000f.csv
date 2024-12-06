@@ -1,0 +1,17 @@
+"0","dds = DESeqDataSetFromMatrix(countData=countData,"
+"0","                             colData=colData,"
+"0","                             design=~condition)"
+"2","Warning: some variables in design formula are characters, converting to factors"
+"0","dds = DESeq(dds)"
+"2","estimating size factors
+"
+"2","estimating dispersions
+"
+"2","gene-wise dispersion estimates
+"
+"2","mean-dispersion relationship
+"
+"2","final dispersion estimates
+"
+"2","fitting model and testing
+"

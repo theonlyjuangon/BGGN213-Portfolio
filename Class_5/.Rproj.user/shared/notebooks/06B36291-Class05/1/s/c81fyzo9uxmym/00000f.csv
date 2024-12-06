@@ -1,0 +1,6 @@
+"0","library (ggrepel)"
+"0",""
+"0","ggplot(mtcars) +"
+"0","  aes(x=mpg, y=disp, size=hp, col=am, label=rownames(mtcars))+"
+"0","  geom_point()+"
+"0","  facet_wrap(~am)"

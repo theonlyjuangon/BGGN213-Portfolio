@@ -1,0 +1,4 @@
+"0","ggplot(gapminder_2007) + "
+"0","  geom_point(aes(x = gdpPercap, y = lifeExp,"
+"0","                 size = pop), alpha=0.5) + "
+"0","  scale_size_area(max_size = 10)"

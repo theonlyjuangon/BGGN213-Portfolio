@@ -1,0 +1,15 @@
+This is a very basic text editor.
+
+pwd: print working directory
+ls: list files
+cd: change directory
+mkdir: make a new directory
+.. : dropping a level
+~ : home area (great for making a script and can assume directory of the other person)
+*  : anything that is in this search (Ex: *.csv (anything .csv))
+RM: removing EVERYTHING in this directory
+nano: text editor
+
+ssh -i "~/Downloads/Leaf.pem" ubuntu@ec2-34-211-12-176.us-west-2.compute.amazonaws.com
+
+scp -i "~/Downloads/Leaf.pem" my_notes.txt ubuntu@ec2-34-211-12-176.us-west-2.compute.amazonaws.com:~/work/.

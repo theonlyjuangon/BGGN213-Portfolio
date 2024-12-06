@@ -1,0 +1,4 @@
+"0","library(ggplot2)"
+"0","ggplot(meancounts) +"
+"0","  aes(control.mean, treated.mean) +"
+"0","  geom_point()"

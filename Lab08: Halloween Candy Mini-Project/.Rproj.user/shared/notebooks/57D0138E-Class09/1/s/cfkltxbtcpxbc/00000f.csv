@@ -1,0 +1,2 @@
+"0","inds<-order(candy$winpercent)"
+"0","head(candy[inds, ])"

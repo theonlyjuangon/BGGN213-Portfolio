@@ -1,0 +1,3 @@
+"0","ggplot(mtcars) +"
+"0","  aes(x=mpg, y=disp, size=hp, color=am) +"
+"0","  geom_point()"
