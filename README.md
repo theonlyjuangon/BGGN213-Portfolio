@@ -1,6 +1,6 @@
 # BGGN213-Portfolio
 
-This is my classwork from BGGN213: (https://bioboot.github.io/bggn213_F24/)
+This is my classwork from [BGGN213](https://bioboot.github.io/bggn213_F24/)
 
 
 - Class 15: [Investigating pertussis](https://github.com/theonlyjuangon/BGGN213-Portfolio/blob/main/Class15/Class15.qmd)
